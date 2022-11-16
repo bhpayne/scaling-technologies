@@ -1,0 +1,199 @@
+\documentclass{book}
+% to set font size use
+% \documentclass[12pt]{book}
+
+% https://www.overleaf.com/learn/latex/Tables
+\usepackage{array}
+\newcommand{\dilemmatablewidth}{5.5cm}
+
+% draw pictures
+\usepackage{tikz} 
+
+% https://tex.stackexchange.com/questions/333617/how-to-use-chapterbib-package-syntax
+% https://www.overleaf.com/latex/examples/per-chapter-bibliographies-with-chapterbib/pqzjpxwyyjyd
+% https://texfaq.org/FAQ-chapbib
+%\usepackage{chapterbib}
+
+% https://tex.stackexchange.com/questions/3001/list-sections-of-chapter-at-beginning-of-that-chapter
+% https://texfaq.org/FAQ-minitoc
+\usepackage{minitoc}
+
+
+% box text 
+% https://tex.stackexchange.com/a/36528/235813
+\usepackage{mdframed}
+
+% https://tex.stackexchange.com/a/172608/235813
+\usepackage{tcolorbox}
+\newtcolorbox{quizbox}[1]{colback=red!5!white,colframe=red!75!black,fonttitle=\bfseries,title=#1}
+
+% how to hyphenate words
+\usepackage[USenglish]{babel}
+
+% strikethrough text
+% https://tex.stackexchange.com/a/23712/235813
+% https://tex.stackexchange.com/a/13699/235813
+\usepackage[normalem]{ulem}
+
+% widows and orphans (paragraphs with single word on new line)
+% https://tex.stackexchange.com/a/558241/235813
+
+\usepackage{float}
+% https://tex.stackexchange.com/a/20380/235813
+
+
+% standard "if" conditional statement breaks pandoc when used inside a caption. Therefore, as per
+% https://tex.stackexchange.com/a/5896/235813
+\usepackage{etoolbox}
+
+
+\usepackage{graphicx}
+
+\usepackage{lineno}
+
+% https://www.overleaf.com/learn/latex/Indices
+% https://latex-tutorial.com/creating-index-latex/
+\usepackage{imakeidx}
+\makeindex
+
+% https://www.quora.com/What-font-are-most-books-printed-in
+% to set font, use
+%\usepackage{ebgaramond}
+
+\usepackage{hyphenat} % http://www.ctex.org/documents/packages/special/hyphenat.pdf
+
+\usepackage{setspace}\onehalfspacing\frenchspacing\flushbottom\sloppy
+
+% https://www.scivision.dev/include-svg-vector-latex/
+%\usepackage{svg}
+% see https://tex.stackexchange.com/questions/442077/is-it-possible-to-use-svg-images-with-overleaf
+
+% https://tex.stackexchange.com/a/8459/235813
+\usepackage[nottoc]{tocbibind}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Bureaucracy Fieldguide},
+    pdfsubject={How to be an Effective Bureaucrat},
+    pdfauthor={Ben Payne},
+    pdfkeywords={Bureaucrat, Bureaucracy},
+    pdfpagemode=FullScreen,
+    }
+
+% https://en.wikibooks.org/wiki/LaTeX/Glossary says
+% "\usepackage{glossaries} and \makeglossaries in your preamble (after \usepackage{hyperref} if present)"
+
+% https://www.overleaf.com/learn/latex/Glossaries
+\usepackage[toc]{glossaries}
+%\usepackage{glossaries-extra}
+
+\makeglossaries % The command must be before the first glossary entry.
+
+% https://en.wikibooks.org/wiki/LaTeX/Glossary says
+% "define any number of \newglossaryentry and \newacronym glossary and acronym entries in your preamble"
+\input{glossary_entries}
+
+\title{Scaling technology levels:\\
+from Excel to distributed computing, the cloud, and beyond \\
+%\vfill
+%\includegraphics[width=0.8\textwidth]{images/bureaucrat_empathizing_with_coworkers_in_office_breakroom.pdf}
+}
+
+% This isn't monograph 
+% "the readership has not only specialized or sophisticated knowledge but also professional interest in the subject of the work."
+% -- https://en.wikipedia.org/wiki/Monograph
+% Might be a https://en.wikipedia.org/wiki/Treatise
+
+%\begin{figure}[H]
+%    \centering
+
+%    \label{fig:empathizing-in-breakroom}
+%\end{figure}
+
+% alternative titles:
+
+\author{Ben Payne}
+\date{\today}
+
+\begin{document}
+\pagenumbering{alph} % Fixes problem with glossary links; see https://tex.stackexchange.com/questions/119527/glossary-backlink-points-to-wrong-page
+
+% https://texblog.org/2012/02/08/adding-line-numbers-to-documents/
+%\linenumbers
+
+
+%\setcounter{secnumdepth}{1}
+% -2 results in no numbering for chapters, sections, or subsections
+% 0  results in no numbering for sections or subsections
+% 1  results in no numbering for subsections
+
+
+\begin{titlepage}
+\maketitle
+\thispagestyle{empty}
+\end{titlepage}
+\clearpage
+
+%\thispagestyle{empty}
+\frontmatter % the front of the book has roman numerals
+
+%\pagenumbering{gobble}
+\input{copyright}\clearpage
+\input{dedication}%\clearpage
+%\pagenumbering{roman}
+
+\dominitoc % Initialization
+\hypertarget{contents}{}
+\tableofcontents
+
+% 2022-07-11: Brian
+%\chapter*{Preface}% * excludes from Contents
+\chapter{Preface}
+\input{preface}\clearpage
+
+\mainmatter % the main part of the book will have standard pages
+
+% https://tex.stackexchange.com/questions/2958/why-is-newpage-ignored-sometimes
+
+
+% https://tex.stackexchange.com/questions/5894/latex-conditional-expression
+\newif\ifpageref
+\newif\ifsectionref
+\pagereffalse
+\sectionreffalse
+
+% etoolbox
+\newtoggle{pageref}
+\newtoggle{sectionref}
+
+\togglefalse{pageref}
+\togglefalse{sectionref}
+
+\include{introduction}
+
+\include{levels_of_support}
+
+
+\clearpage
+
+\printglossaries
+
+\nocite{*} % causes LaTeX to include every entry in your .bib file.
+
+% To investigate: bibliography per chapter
+% https://stackoverflow.com/questions/2765209/latex-bibliography-per-chapter
+% https://stackoverflow.com/questions/2503555/using-latex-how-can-i-have-a-list-of-references-at-the-end-of-each-section
+
+% https://www.overleaf.com/learn/latex/Bibtex_bibliography_styles
+% http://www-math.ucdenver.edu/~billups/courses/guides/annotated_bibliography.html
+\bibliographystyle{plain-annote}
+%\bibliography{biblio_bureaucracy}%,biblio_meetings}
+
+\printindex
+
+
+\end{document}
